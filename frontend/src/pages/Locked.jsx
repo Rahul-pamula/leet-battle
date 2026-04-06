@@ -47,6 +47,9 @@ const Locked = () => {
             <div className="text-xs text-slate-600 bg-slate-900 p-2 rounded">
               Formula: (Point Diff / 210) × 100
             </div>
+            <div className="text-sm text-slate-400 mt-4">
+              Pay via UPI to <span className="font-semibold text-white">friend@upi</span> and upload receipt for confirmation.
+            </div>
           </div>
         )}
 
