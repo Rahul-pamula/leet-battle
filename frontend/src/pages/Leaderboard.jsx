@@ -6,6 +6,7 @@ const Leaderboard = () => {
   const [data, setData] = useState(null);
   const [week, setWeek] = useState(null);
   const navigate = useNavigate();
+  const [oppList, setOppList] = useState([]);
 
   useEffect(() => {
     api.get('/competition/leaderboard/')
@@ -13,7 +14,10 @@ const Leaderboard = () => {
        .catch(console.error);
 
     api.get('/competition/week/current/')
-       .then(res => setWeek(res.data))
+       .then(res => {
+         setWeek(res.data);
+         setOppList(res.data.opponent_assignments || []);
+       })
        .catch(console.error);
   }, []);
 
@@ -67,6 +71,31 @@ const Leaderboard = () => {
           Simulate End of Week
         </button>
       </div>
+
+      {oppList.length > 0 && (
+        <div className="mt-10 bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg">
+          <h3 className="text-xl font-bold text-slate-100 mb-4">Your friend's assignments</h3>
+          <div className="space-y-3">
+            {oppList.map(item => {
+              const url = item.problem?.leetcode_url || (item.problem?.slug ? `https://leetcode.com/problems/${item.problem.slug}/` : '#');
+              return (
+                <div key={`${item.assigned_date}-${url}`} className="flex justify-between items-center bg-slate-900 px-3 py-2 rounded border border-slate-700">
+                  <div>
+                    <div className="text-slate-200 font-semibold">{item.problem?.title || 'Problem'}</div>
+                    <div className="text-xs text-slate-500">Assigned: {item.assigned_date}</div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xs px-2 py-1 rounded-full ${item.solved ? 'bg-green-600 text-white' : 'bg-slate-700 text-slate-300'}`}>
+                      {item.solved ? 'Solved' : 'Pending'}
+                    </span>
+                    <a className="text-xs text-blue-400 hover:text-blue-200" href={url} target="_blank" rel="noreferrer">View</a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
