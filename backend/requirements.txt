@@ -1,0 +1,8 @@
+django>=6.0.0
+djangorestframework
+djangorestframework-simplejwt
+django-mongodb-backend==6.0.*
+python-dotenv
+groq
+requests
+django-cors-headers
